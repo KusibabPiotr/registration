@@ -25,6 +25,8 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 data
+pgadmin
+pgadmin/**
 
 ### VS Code ###
 .vscode/
