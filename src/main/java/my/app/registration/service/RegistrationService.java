@@ -2,6 +2,8 @@ package my.app.registration.service;
 
 import lombok.RequiredArgsConstructor;
 import my.app.registration.dto.RegistrationRequestDto;
+import my.app.registration.email.EmailBuilder;
+import my.app.registration.email.EmailService;
 import my.app.registration.exception.*;
 import my.app.registration.mapper.AppUserMapper;
 import my.app.registration.model.ConfirmationToken;
