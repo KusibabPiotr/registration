@@ -3,6 +3,7 @@ package my.app.registration.controller;
 import lombok.RequiredArgsConstructor;
 import my.app.registration.dto.RegistrationRequestDto;
 import my.app.registration.exception.*;
+import my.app.registration.service.RegistrationService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
