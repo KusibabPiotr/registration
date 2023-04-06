@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.app.registration.exception.EmailAlreadyExistsInDatabaseException;
 import my.app.registration.model.AppUser;
 import my.app.registration.model.ConfirmationToken;
+import my.app.registration.repository.AppUserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
