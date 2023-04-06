@@ -1,18 +1,21 @@
 package my.app.registration.model;
 
-import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-@Data
-public class RegistrationRequest {
-
-        @Email(message = "Provide right email format!")
+public record RegistrationRequest(
+        @Email(regexp = "^(.+)@(\\S+)$", message = "You have to provide right email format!")
         @NotBlank(message = "Email is mandatory!")
-        private final String login;
+        @NotNull
+        String login,
+        @Length(min = 6, message = "Your password should contain at least 6 characters!")
         @NotBlank(message = "Password is mandatory!")
-        private final String password;
+        @NotNull
+        String password,
         @NotBlank(message = "Repeat your password")
-        private final String repeatPassword;
-}
+        @NotNull
+        String repeatPassword
+) {}
