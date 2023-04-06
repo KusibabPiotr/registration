@@ -1,18 +1,17 @@
 package my.app.registration.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@Builder
 @Entity
+@EqualsAndHashCode
 @Getter
-@Setter
 @NoArgsConstructor
+@Setter
 public class ConfirmationToken {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,30 +21,11 @@ public class ConfirmationToken {
     private LocalDateTime created;
     @Column(nullable = false)
     private LocalDateTime expiresAt;
-    @Column(nullable = true)
     private LocalDateTime confirmedAt;
-//    @ManyToOne
-//    private AppUser appUser;
-
-//    public ConfirmationToken(AppUser appUser) {
-//        this.token = UUID.randomUUID().toString();
-//        this.created = LocalDateTime.now();
-//        this.expiresAt = LocalDateTime.now().plusMinutes(15);
-//        this.appUser = appUser;
-//    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ConfirmationToken that = (ConfirmationToken) o;
-
-        return token.equals(that.token);
-    }
-
-    @Override
-    public int hashCode() {
-        return token.hashCode();
-    }
+    @ManyToOne
+    @JoinColumn(
+            nullable = false,
+            name = "APP_USER_ID"
+    )
+    private AppUser appUser;
 }

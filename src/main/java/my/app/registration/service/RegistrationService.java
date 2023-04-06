@@ -3,6 +3,7 @@ package my.app.registration.service;
 import lombok.RequiredArgsConstructor;
 import my.app.registration.dto.RegistrationRequestDto;
 import my.app.registration.exception.*;
+import my.app.registration.mapper.AppUserMapper;
 import my.app.registration.model.ConfirmationToken;
 import my.app.registration.validator.PasswordEqualityValidator;
 import my.app.registration.validator.TokenValidator;
@@ -28,10 +29,10 @@ public class RegistrationService {
     public String register(final RegistrationRequestDto request)
             throws EmailNotValidException, PasswordNotMatchException,
             EmailAlreadyExistsInDatabaseException {
-        passwordEqualityValidator.validate(request.getPassword(), request.getRepeatPassword());
+        passwordEqualityValidator.validate(request.password(), request.repeatPassword());
 
         String link = linkWithoutToken + appUserService.signUpUser(AppUserMapper.mapToAppUser(request));
-        emailService.send(request.getEmail(), EmailBuilder.buildEmail("Stranger", link));
+        emailService.send(request.email(), EmailBuilder.buildEmail("Stranger", link));
         return EMAIL_WITH_LINK_JUST_SEND;
     }
 
