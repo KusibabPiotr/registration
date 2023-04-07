@@ -27,6 +27,7 @@ out/
 data
 pgadmin
 pgadmin/**
+notes.txt
 
 ### VS Code ###
 .vscode/

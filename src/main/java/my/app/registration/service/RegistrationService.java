@@ -11,7 +11,12 @@ import my.app.registration.validator.PasswordEqualityValidator;
 import my.app.registration.validator.TokenValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 import static my.app.registration.Constants.EMAIL_SUCCESSFULLY_CONFIRMED;
 import static my.app.registration.Constants.EMAIL_WITH_LINK_JUST_SEND;
@@ -30,7 +35,7 @@ public class RegistrationService {
 
     public String register(final RegistrationRequestDto request)
             throws EmailNotValidException, PasswordNotMatchException,
-            EmailAlreadyExistsInDatabaseException {
+            EmailAlreadyExistsInDatabaseException, MessagingException, GeneralSecurityException, IOException {
         passwordEqualityValidator.validate(request.password(), request.repeatPassword());
 
         String link = linkWithoutToken + appUserService.signUpUser(AppUserMapper.mapToAppUser(request));

@@ -1,4 +1,5 @@
 spring:
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -13,8 +14,9 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+
   mail:
-    host: smtp.gmail.com
+    host: smtp.office365.com
     port: 587
     protocol: smtp
     username: ${MAIL_USERNAME}
@@ -26,7 +28,7 @@ spring:
           starttls:
             enable: true
 
-confirm_registration_link: http://localhost:8080/api/v1/registration/confirm?token=
-#email_config
+confirm_registration_link: ${CONFIRMATION_LINK}
+
 admin:
   email: ${MAIL_USERNAME}

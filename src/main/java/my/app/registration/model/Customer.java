@@ -1,16 +1,14 @@
 package my.app.registration.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Builder
 @Entity
-@EqualsAndHashCode
 @Getter
 @NoArgsConstructor
 @Setter
@@ -23,4 +21,17 @@ public class Customer {
     private AppUser appUser;
     private String firstName;
     private String lastName;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Customer customer = (Customer) o;
+        return id != null && Objects.equals(id, customer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

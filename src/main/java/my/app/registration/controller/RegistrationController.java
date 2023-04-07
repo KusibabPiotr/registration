@@ -6,7 +6,10 @@ import my.app.registration.exception.*;
 import my.app.registration.service.RegistrationService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 @RestController
 @RequestMapping("/api/v1/registration")
@@ -17,7 +20,7 @@ public class RegistrationController {
     @PostMapping
     public String register(@RequestBody @Valid RegistrationRequestDto request)
             throws EmailNotValidException, PasswordNotMatchException,
-            EmailAlreadyExistsInDatabaseException {
+            EmailAlreadyExistsInDatabaseException, MessagingException, GeneralSecurityException, IOException {
         return registrationService.register(request);
     }
 
