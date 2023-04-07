@@ -12,11 +12,7 @@ import my.app.registration.validator.TokenValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 import static my.app.registration.Constants.EMAIL_SUCCESSFULLY_CONFIRMED;
 import static my.app.registration.Constants.EMAIL_WITH_LINK_JUST_SEND;
@@ -35,26 +31,53 @@ public class RegistrationService {
 
     public String register(final RegistrationRequestDto request)
             throws EmailNotValidException, PasswordNotMatchException,
-            EmailAlreadyExistsInDatabaseException, MessagingException, GeneralSecurityException, IOException {
-        passwordEqualityValidator.validate(request.password(), request.repeatPassword());
-
-        String link = linkWithoutToken + appUserService.signUpUser(AppUserMapper.mapToAppUser(request));
-        emailService.send(request.email(), EmailBuilder.buildEmail("Stranger", link));
+            EmailAlreadyExistsInDatabaseException{
+        validateIfPasswordsAreTheSame(request);
+        String token = signUpUserAndGetTokenForConfirmation(request);
+        sendEmailWithConfirmationEmail(request, token);
         return EMAIL_WITH_LINK_JUST_SEND;
     }
 
+    private void sendEmailWithConfirmationEmail(RegistrationRequestDto request, String token) {
+        emailService.send(request.email(), EmailBuilder.buildEmail("Stranger", linkWithoutToken + token));
+    }
+
+    private String signUpUserAndGetTokenForConfirmation(RegistrationRequestDto request) {
+        return appUserService.signUpUser(AppUserMapper.mapToAppUser(request));
+    }
+
+    private void validateIfPasswordsAreTheSame(RegistrationRequestDto request) {
+        passwordEqualityValidator.validate(request.password(), request.repeatPassword());
+    }
+
     @Transactional
-    public String confirmToken(final String token)
+    public String confirmRegistration(final String token)
             throws TokenNotFoundException, EmailAlreadyConfirmedException,
             TokenExpiredException {
+        ConfirmationToken confirmationToken = obtainConfirmationToken(token);
+        validateToken(confirmationToken);
+        setConfirmationTime(token);
+        enableUser(confirmationToken);
+        return EMAIL_SUCCESSFULLY_CONFIRMED;
+    }
+
+    private void enableUser(ConfirmationToken confirmationToken) {
+        appUserService.enableAppUser(confirmationToken.getAppUser().getUsername());
+    }
+
+    private void setConfirmationTime(String token) {
+        confirmationTokenService.setConfirmedAt(token);
+    }
+
+    private void validateToken(ConfirmationToken confirmationToken) {
+        tokenValidator.validateIfAlreadyConfirmed(confirmationToken.getConfirmedAt());
+        tokenValidator.validateConfirmationTime(confirmationToken.getExpiresAt());
+    }
+
+    private ConfirmationToken obtainConfirmationToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(TokenNotFoundException::new);
-        tokenValidator.validateIfAlreadyConfirmed(confirmationToken.getConfirmedAt());
-        tokenValidator.validateConfirmationTime(confirmationToken.getExpiresAt());
-
-        confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(confirmationToken.getAppUser().getUsername());
-        return EMAIL_SUCCESSFULLY_CONFIRMED;
+        return confirmationToken;
     }
 }
