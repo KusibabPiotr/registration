@@ -11,7 +11,7 @@ public class PasswordEqualityValidator {
             throw new PasswordNotMatchException();
         }
     }
-    public boolean test(final String password,final String repeatedPassword) {
+    boolean test(final String password, final String repeatedPassword) {
         return password.equals(repeatedPassword);
     }
 }

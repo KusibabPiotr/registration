@@ -21,7 +21,7 @@ public class CoreConfigurationTest {
     private RestTemplate restTemplate;
 
     @Test
-    public void testBCryptPasswordEncoder() {
+    public void shouldCheckIfBCryptPasswordEncoderWasInitialized() {
         String password = "password";
         String encodedPassword = bCryptPasswordEncoder.encode(password);
 
@@ -29,7 +29,7 @@ public class CoreConfigurationTest {
     }
 
     @Test
-    public void testRestTemplate() {
+    public void shouldCheckIfRestTemplateWasInitialized() {
         assertThat(restTemplate).isNotNull();
     }
 }

@@ -45,24 +45,24 @@ class RegistrationControllerTest {
     }
 
     @Test
-    void testRegistration_success() throws Exception {
-        // Arrange
+    void shouldActRegistrationSuccess() throws Exception {
+        // given
         RegistrationRequestDto requestDto = new RegistrationRequestDto("test@example.com","password123","password123");
         when(registrationService.register(any(RegistrationRequestDto.class))).thenReturn("email sent");
 
-        // Act
+        // when
         ResultActions resultActions = mockMvc.perform(post("/api/v1/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\":\"test@example.com\",\"password\":\"password123\",\"repeatPassword\":\"password123\"}"));
 
-        // Assert
+        // then
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("email sent")));
         verify(registrationService).register(requestDto);
     }
 
     @Test
-    public void testConfirmRegistration_success() throws Exception {
+    public void shouldActConfirmRegistrationSuccess() throws Exception {
         // given
         String token = "token";
         when(registrationService.confirmRegistration(token)).thenReturn("success");
@@ -74,9 +74,10 @@ class RegistrationControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("success"));
     }
     @Test
-    public void testRegister_UnsuccessfulRegistration_EmailNotValidException() throws Exception {
+    public void shouldActRegistrationUnsuccessfulRegistrationEmailNotValidException() throws Exception {
+        //given
         RegistrationRequestDto requestDto = new RegistrationRequestDto("invalid-email", "password", "password");
-
+        //when-then
         mockMvc.perform(post("/api/v1/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDto)))
@@ -84,7 +85,7 @@ class RegistrationControllerTest {
     }
 
     @Test
-    public void testRegister_UnsuccessfulRegistration_PasswordToShortException() throws Exception {
+    public void shouldActRegistrationUnsuccessfulRegistrationPasswordToShortException() throws Exception {
         RegistrationRequestDto requestDto = new RegistrationRequestDto("invalid@gmail.com", "pass", "pass");
 
         mockMvc.perform(post("/api/v1/registration")

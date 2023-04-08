@@ -28,7 +28,7 @@ spring:
           starttls:
             enable: true
 
-confirm_registration_link: ${CONFIRMATION_LINK}
+confirm_registration_link: http://localhost:8080/api/v1/registration/confirm?token=
 
 admin:
   email: ${MAIL_USERNAME}
