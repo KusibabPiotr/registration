@@ -17,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @WebMvcTest(controllers = GlobalExceptionHandler.class)
 @ContextConfiguration(classes = {GlobalExceptionHandler.class})
@@ -32,7 +31,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleEmailAlreadyExistsInDatabaseException() throws Exception {
+    public void shouldCheckIfHandlerForEmailAlreadyExistsInDatabaseExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handleEmailAlreadyExistsInDatabaseException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -40,7 +39,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandlePasswordNotMatchException() throws Exception {
+    public void shouldCheckIfHandlerForPasswordNotMatchExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handlePasswordNotMatchException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -48,7 +47,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleEmailAlreadyConfirmedException() throws Exception {
+    public void shouldCheckIfHandlerForEmailAlreadyConfirmedExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handleEmailAlreadyConfirmedException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -56,7 +55,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleTokenExpiredException() throws Exception {
+    public void shouldCheckIfHandlerForTokenExpiredExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handleTokenExpiredException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -64,7 +63,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleTokenNotFoundException(){
+    public void shouldCheckIfHandlerForTokenNotFoundExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handleTokenNotFoundException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -72,7 +71,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void testHandleUsernameNotFoundException(){
+    public void shouldCheckIfHandlerForUsernameNotFoundExceptionWorkingCorrectly(){
         ResponseEntity<String> response = handler.handleUsernameNotFoundException();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(400);
@@ -80,7 +79,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void handleMethodArgumentNotValid() {
+    public void shouldCheckIfHandlerForMethodArgumentNotValidWorkingCorrectly() {
         GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
         BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "object");
         bindingResult.addError(new FieldError("object", "field", "error message"));

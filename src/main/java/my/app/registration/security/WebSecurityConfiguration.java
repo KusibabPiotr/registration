@@ -1,7 +1,9 @@
-package my.app.registration;
+package my.app.registration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import my.app.registration.jwt.filter.JwtAuthenticationFilter;
+import my.app.registration.jwt.filter.JwtAuthorizationFilter;
 import my.app.registration.service.AppUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +27,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-//    private final AuthenticationSuccessHandler successHandler;
-//    private final AuthenticationFailureHandler failureHandler;
-//    private final JwtAuthorizationFilter authorizationFilter;
+    private final AuthenticationSuccessHandler successHandler;
+    private final AuthenticationFailureHandler failureHandler;
+    private final JwtAuthorizationFilter authorizationFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,19 +46,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .addFilter(authenticationFilter())
-//                .addFilterAfter(authorizationFilter,JwtAuthenticationFilter.class)
+                .addFilter(authenticationFilter())
+                .addFilterAfter(authorizationFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
 
-//    public JwtAuthenticationFilter authenticationFilter() throws Exception{
-//        var filter = new JwtAuthenticationFilter(getObjectMapper());
-//        filter.setAuthenticationSuccessHandler(successHandler);
-//        filter.setAuthenticationFailureHandler(failureHandler);
-//        filter.setAuthenticationManager(authenticationManager());
-//        return filter;
-//    }
+    public JwtAuthenticationFilter authenticationFilter() throws Exception{
+        var filter = new JwtAuthenticationFilter(getObjectMapper());
+        filter.setAuthenticationSuccessHandler(successHandler);
+        filter.setAuthenticationFailureHandler(failureHandler);
+        filter.setAuthenticationManager(authenticationManager());
+        return filter;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
